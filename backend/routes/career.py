@@ -20,7 +20,7 @@ class UserInput(BaseModel):
 @router.post("/recommend")
 def recommend(user: UserInput):
 
-    career, score, careers = recommend_career(
+    career, score, careers, details = recommend_career(
         user.skills,
         user.interests
     )
@@ -53,12 +53,16 @@ def recommend(user: UserInput):
     db.close()
 
     return {
-        "recommended_career": career,
-        "confidence_score": score,
-        "roadmap": careers[career]["roadmap"] if career else [],
-        "resources": careers[career]["resources"] if career else [],
-        "related_careers": careers[career]["related_careers"] if career else []
-    }
+    "recommended_career": career,
+    "confidence_score": score,
+    "match_percentage": details["match_percentage"],
+    "matched_skills": details["matched_skills"],
+    "missing_skills": details["missing_skills"],
+    "matched_interests": details["matched_interests"],
+    "roadmap": careers[career]["roadmap"] if career else [],
+    "resources": careers[career]["resources"] if career else [],
+    "related_careers": careers[career]["related_careers"] if career else []
+}
 
 
 # ---------------- CAREER DETAILS ----------------

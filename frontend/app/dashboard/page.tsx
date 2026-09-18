@@ -53,6 +53,11 @@ export default function Dashboard() {
     try {
       const userId = localStorage.getItem("userId");
 
+      if (!userId) {
+        window.location.href = "/login";
+        return;
+      }
+
       const response = await fetch(
         "http://127.0.0.1:8000/recommend",
         {
@@ -61,14 +66,19 @@ export default function Dashboard() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-          user_id: Number(localStorage.getItem("userId")),
-          skills: skills.split(",").map((s) => s.trim()),
-          interests: interests.split(",").map((i) => i.trim()),
+            user_id: Number(userId),
+            skills: skills
+              .split(",")
+              .map((s) => s.trim())
+              .filter((s) => s !== ""),
+            interests: interests
+              .split(",")
+              .map((i) => i.trim())
+              .filter((i) => i !== ""),
           }),
         }
       );
 
-           
       const data = await response.json();
 
       if (!response.ok) {
@@ -228,11 +238,44 @@ export default function Dashboard() {
         {result && (
           <div className="bg-slate-900 rounded-2xl mt-10 p-8 shadow-xl">
 
+            {/* CAREER */}
+
             <h2 className="text-3xl font-bold text-green-400">
               {result.recommended_career}
             </h2>
 
-            <p className="mt-3 text-xl">
+            {/* MATCH PERCENTAGE */}
+
+            <div className="mt-6 bg-slate-800 rounded-xl p-5">
+
+              <div className="flex justify-between items-center mb-3">
+
+                <h3 className="text-xl font-semibold">
+                  🎯 Career Match
+                </h3>
+
+                <span className="text-2xl font-bold text-blue-400">
+                  {result.match_percentage}%
+                </span>
+
+              </div>
+
+              <div className="w-full bg-slate-700 rounded-full h-4">
+
+                <div
+                  className="bg-blue-600 h-4 rounded-full transition-all"
+                  style={{
+                    width: `${result.match_percentage}%`,
+                  }}
+                />
+
+              </div>
+
+            </div>
+
+            {/* CONFIDENCE SCORE */}
+
+            <p className="mt-5 text-xl">
               Confidence Score:
 
               <span className="font-bold text-blue-400">
@@ -240,6 +283,117 @@ export default function Dashboard() {
                 {result.confidence_score}
               </span>
             </p>
+
+            {/* MATCHED SKILLS */}
+
+            <div className="mt-8">
+
+              <h3 className="text-2xl font-semibold mb-3">
+                ✅ Skills You Already Have
+              </h3>
+
+              {result.matched_skills?.length > 0 ? (
+
+                <div className="flex flex-wrap gap-3">
+
+                  {result.matched_skills.map(
+                    (skill: string, index: number) => (
+
+                      <span
+                        key={index}
+                        className="bg-green-600 px-4 py-2 rounded-lg"
+                      >
+                        {skill}
+                      </span>
+
+                    )
+                  )}
+
+                </div>
+
+              ) : (
+
+                <p className="text-gray-400">
+                  No matching skills found yet.
+                </p>
+
+              )}
+
+            </div>
+
+            {/* MISSING SKILLS */}
+
+            <div className="mt-8">
+
+              <h3 className="text-2xl font-semibold mb-3">
+                ⚠️ Skills to Improve
+              </h3>
+
+              {result.missing_skills?.length > 0 ? (
+
+                <div className="flex flex-wrap gap-3">
+
+                  {result.missing_skills.map(
+                    (skill: string, index: number) => (
+
+                      <span
+                        key={index}
+                        className="bg-orange-600 px-4 py-2 rounded-lg"
+                      >
+                        {skill}
+                      </span>
+
+                    )
+                  )}
+
+                </div>
+
+              ) : (
+
+                <p className="text-green-400">
+                  You already have all the required skills!
+                </p>
+
+              )}
+
+            </div>
+
+            {/* MATCHED INTERESTS */}
+
+            <div className="mt-8">
+
+              <h3 className="text-2xl font-semibold mb-3">
+                ❤️ Matching Interests
+              </h3>
+
+              {result.matched_interests?.length > 0 ? (
+
+                <div className="flex flex-wrap gap-3">
+
+                  {result.matched_interests.map(
+                    (interest: string, index: number) => (
+
+                      <span
+                        key={index}
+                        className="bg-purple-600 px-4 py-2 rounded-lg"
+                      >
+                        {interest}
+                      </span>
+
+                    )
+                  )}
+
+                </div>
+
+              ) : (
+
+                <p className="text-gray-400">
+                  No matching interests found yet.
+                </p>
+
+              )}
+
+            </div>
 
             {/* ROADMAP */}
 
@@ -263,43 +417,46 @@ export default function Dashboard() {
 
             </div>
 
-            {/* RESOURCES */}
             {/* RELATED CAREERS */}
 
-<div className="mt-8">
+            <div className="mt-8">
 
-  <h3 className="text-2xl font-semibold mb-3">
-    🔗 Related Career Paths
-  </h3>
+              <h3 className="text-2xl font-semibold mb-3">
+                🔗 Related Career Paths
+              </h3>
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-    {result.related_careers?.map(
-      (career: string, index: number) => (
-        <button
-          key={index}
-          onClick={() => {
-            window.location.href =
-              `/career/${encodeURIComponent(career)}`;
-          }}
-          className="text-left bg-slate-800 p-5 rounded-xl hover:bg-slate-700 transition"
-        >
+                {result.related_careers?.map(
+                  (career: string, index: number) => (
 
-          <h4 className="text-lg font-semibold text-blue-400">
-            {career}
-          </h4>
+                    <button
+                      key={index}
+                      onClick={() => {
+                        window.location.href =
+                          `/career/${encodeURIComponent(career)}`;
+                      }}
+                      className="text-left bg-slate-800 p-5 rounded-xl hover:bg-slate-700 transition"
+                    >
 
-          <p className="text-gray-400 mt-2">
-            Click to explore this career path.
-          </p>
+                      <h4 className="text-lg font-semibold text-blue-400">
+                        {career}
+                      </h4>
 
-        </button>
-      )
-    )}
+                      <p className="text-gray-400 mt-2">
+                        Click to explore this career path.
+                      </p>
 
-  </div>
+                    </button>
 
-</div>
+                  )
+                )}
+
+              </div>
+
+            </div>
+
+            {/* RESOURCES */}
 
             <div className="mt-8">
 
@@ -311,6 +468,7 @@ export default function Dashboard() {
 
                 {result.resources.map(
                   (resource: any, index: number) => (
+
                     <li key={index}>
 
                       <a
@@ -323,6 +481,7 @@ export default function Dashboard() {
                       </a>
 
                     </li>
+
                   )
                 )}
 
@@ -342,14 +501,18 @@ export default function Dashboard() {
           </h2>
 
           {history.length === 0 ? (
+
             <p className="text-gray-400">
               No recommendations yet.
             </p>
+
           ) : (
+
             <ul className="space-y-3">
 
               {history.map(
                 (item: any, index: number) => (
+
                   <li
                     key={index}
                     className="bg-slate-800 p-4 rounded-lg flex justify-between"
@@ -364,10 +527,12 @@ export default function Dashboard() {
                     </span>
 
                   </li>
+
                 )
               )}
 
             </ul>
+
           )}
 
         </div>
@@ -389,10 +554,13 @@ export default function Dashboard() {
           <div className="bg-slate-950 rounded-xl p-5 min-h-[250px] max-h-[400px] overflow-y-auto space-y-4 mt-6">
 
             {chatMessages.length === 0 ? (
+
               <div className="text-gray-500 text-center py-10">
                 Start a conversation with your Career Assistant.
               </div>
+
             ) : (
+
               chatMessages.map((chat, index) => (
 
                 <div
@@ -417,12 +585,15 @@ export default function Dashboard() {
                 </div>
 
               ))
+
             )}
 
             {chatLoading && (
+
               <div className="text-gray-400">
                 Career Assistant is typing...
               </div>
+
             )}
 
           </div>

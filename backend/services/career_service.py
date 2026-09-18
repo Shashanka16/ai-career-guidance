@@ -271,22 +271,77 @@ def recommend_career(user_skills, user_interests):
     best_match = None
     max_score = 0
 
+    best_details = {
+        "matched_skills": [],
+        "missing_skills": [],
+        "matched_interests": [],
+        "match_percentage": 0
+    }
+
+    # Convert user input to lowercase
+    normalized_skills = [
+        skill.strip().lower()
+        for skill in user_skills
+    ]
+
+    normalized_interests = [
+        interest.strip().lower()
+        for interest in user_interests
+    ]
+
     for career, data in careers.items():
 
         score = 0
 
-        for skill in user_skills:
+        matched_skills = []
+        missing_skills = []
+        matched_interests = []
 
-            if skill.lower() in data["skills"]:
+        # Check skills
+        for skill in data["skills"]:
+
+            if skill in normalized_skills:
                 score += 2
+                matched_skills.append(skill)
+            else:
+                missing_skills.append(skill)
 
-        for interest in user_interests:
+        # Check interests
+        for interest in normalized_interests:
 
-            if interest.lower() in data["interests"]:
+            if interest in data["interests"]:
                 score += 1
+                matched_interests.append(interest)
 
+        # Calculate maximum possible score
+        max_possible_score = (
+            len(data["skills"]) * 2
+            + len(data["interests"])
+        )
+
+        if max_possible_score > 0:
+            match_percentage = round(
+                (score / max_possible_score) * 100
+            )
+        else:
+            match_percentage = 0
+
+        # Update best career
         if score > max_score:
+
             max_score = score
             best_match = career
 
-    return best_match, max_score, careers
+            best_details = {
+                "matched_skills": matched_skills,
+                "missing_skills": missing_skills,
+                "matched_interests": matched_interests,
+                "match_percentage": match_percentage
+            }
+
+    return (
+        best_match,
+        max_score,
+        careers,
+        best_details
+    )
