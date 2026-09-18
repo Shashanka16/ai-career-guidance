@@ -61,19 +61,14 @@ export default function Dashboard() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            skills: skills
-              .split(",")
-              .map((s) => s.trim()),
-
-            interests: interests
-              .split(",")
-              .map((i) => i.trim()),
-
-            user_id: userId ? Number(userId) : null,
+          user_id: Number(localStorage.getItem("userId")),
+          skills: skills.split(",").map((s) => s.trim()),
+          interests: interests.split(",").map((i) => i.trim()),
           }),
         }
       );
 
+           
       const data = await response.json();
 
       if (!response.ok) {

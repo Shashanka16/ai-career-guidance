@@ -1,7 +1,7 @@
 from database import SessionLocal
 from models.users import User
 from models.recommendation import Recommendation
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from services.career_service import recommend_career
@@ -10,6 +10,7 @@ router = APIRouter()
 
 
 class UserInput(BaseModel):
+    user_id: int
     skills: list[str]
     interests: list[str]
 
@@ -26,13 +27,22 @@ def recommend(user: UserInput):
 
     db = SessionLocal()
 
-    # Temporary: save recommendation for the first user
-    first_user = db.query(User).first()
+    # Find the actual logged-in user
+    current_user = db.query(User).filter(
+        User.id == user.user_id
+    ).first()
 
-    if first_user and career:
+    if not current_user:
+        db.close()
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
 
+    # Save recommendation for this specific user
+    if career:
         recommendation = Recommendation(
-            user_id=first_user.id,
+            user_id=current_user.id,
             career=career,
             confidence=score
         )
@@ -49,6 +59,8 @@ def recommend(user: UserInput):
         "resources": careers[career]["resources"] if career else [],
         "related_careers": careers[career]["related_careers"] if career else []
     }
+
+
 # ---------------- CAREER DETAILS ----------------
 
 @router.get("/career/{career_name}")
@@ -58,7 +70,6 @@ def get_career_details(career_name: str):
 
     careers = get_careers()
 
-    # Find the career
     if career_name not in careers:
         return {
             "error": "Career not found"
@@ -90,7 +101,6 @@ def history(user_id: int):
     result = []
 
     for recommendation in recommendations:
-
         result.append({
             "career": recommendation.career,
             "confidence": recommendation.confidence
