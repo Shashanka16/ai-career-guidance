@@ -20,7 +20,7 @@ class UserInput(BaseModel):
 @router.post("/recommend")
 def recommend(user: UserInput):
 
-    career, score, careers, details = recommend_career(
+    career, score, careers, details, top_matches = recommend_career(
         user.skills,
         user.interests
     )
@@ -39,7 +39,7 @@ def recommend(user: UserInput):
             detail="User not found"
         )
 
-    # Save recommendation for this specific user
+    # Save primary recommendation
     if career:
         recommendation = Recommendation(
             user_id=current_user.id,
@@ -53,16 +53,22 @@ def recommend(user: UserInput):
     db.close()
 
     return {
-    "recommended_career": career,
-    "confidence_score": score,
-    "match_percentage": details["match_percentage"],
-    "matched_skills": details["matched_skills"],
-    "missing_skills": details["missing_skills"],
-    "matched_interests": details["matched_interests"],
-    "roadmap": careers[career]["roadmap"] if career else [],
-    "resources": careers[career]["resources"] if career else [],
-    "related_careers": careers[career]["related_careers"] if career else []
-}
+        "recommended_career": career,
+        "confidence_score": score,
+
+        "match_percentage": details["match_percentage"],
+
+        "matched_skills": details["matched_skills"],
+        "missing_skills": details["missing_skills"],
+        "matched_interests": details["matched_interests"],
+
+        # NEW: Top 3 career matches
+        "top_matches": top_matches,
+
+        "roadmap": careers[career]["roadmap"] if career else [],
+        "resources": careers[career]["resources"] if career else [],
+        "related_careers": careers[career]["related_careers"] if career else []
+    }
 
 
 # ---------------- CAREER DETAILS ----------------

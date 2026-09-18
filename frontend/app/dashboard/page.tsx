@@ -283,6 +283,71 @@ export default function Dashboard() {
                 {result.confidence_score}
               </span>
             </p>
+            {/* TOP 3 CAREER MATCHES */}
+
+{result.top_matches?.length > 0 && (
+  <div className="mt-8">
+    <h3 className="text-2xl font-semibold mb-4">
+      🏆 Top Career Matches
+    </h3>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {result.top_matches.map((match: any, index: number) => (
+        <div
+          key={index}
+          className="bg-slate-800 p-5 rounded-xl border border-slate-700"
+        >
+          <h4 className="text-lg font-semibold text-blue-400">
+            {index + 1}. {match.career}
+          </h4>
+
+          <p className="text-green-400 font-bold mt-2">
+            Match: {match.match_percentage}%
+          </p>
+
+          <p className="text-gray-400 mt-1">
+            Score: {match.score}
+          </p>
+
+          <div className="mt-4">
+            <p className="text-sm text-gray-400 mb-2">
+              Matching Skills
+            </p>
+
+            {match.matched_skills?.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {match.matched_skills.map(
+                  (skill: string, skillIndex: number) => (
+                    <span
+                      key={skillIndex}
+                      className="bg-green-700 px-2 py-1 rounded text-sm"
+                    >
+                      {skill}
+                    </span>
+                  )
+                )}
+              </div>
+            ) : (
+              <p className="text-gray-500 text-sm">
+                No matching skills yet.
+              </p>
+            )}
+          </div>
+
+          <button
+            onClick={() => {
+              window.location.href =
+                `/career/${encodeURIComponent(match.career)}`;
+            }}
+            className="mt-5 w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold"
+          >
+            Explore Career
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
 
             {/* MATCHED SKILLS */}
 

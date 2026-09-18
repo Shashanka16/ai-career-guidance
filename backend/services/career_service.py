@@ -1,275 +1,1038 @@
-def get_careers():
+# ============================================================
+# CAREER DATABASE
+# ============================================================
 
-    return {
+CAREERS = {
 
-        "Data Scientist": {
+    # --------------------------------------------------------
+    # DATA SCIENTIST
+    # --------------------------------------------------------
 
-            "skills": [
-                "python",
-                "statistics",
-                "machine learning",
-                "sql",
-                "pandas"
-            ],
+    "Data Scientist": {
+        "skills": [
+            "python",
+            "statistics",
+            "machine learning",
+            "sql",
+            "pandas"
+        ],
 
-            "interests": [
-                "data",
-                "ai",
-                "analytics",
-                "insights"
-            ],
+        "interests": [
+            "data",
+            "ai",
+            "analytics",
+            "insights"
+        ],
 
-            "related_careers": [
-                "Machine Learning Engineer",
-                "Data Engineer",
-                "AI Engineer"
-            ],
+        "roadmap": [
+            "Python",
+            "Statistics",
+            "SQL",
+            "Pandas",
+            "Data Visualization",
+            "Machine Learning",
+            "Deep Learning",
+            "Projects"
+        ],
 
-            "roadmap": [
-                "Python",
-                "Statistics",
-                "SQL",
-                "Machine Learning",
-                "Deep Learning"
-            ],
+        "resources": [
+            {
+                "name": "Kaggle",
+                "url": "https://www.kaggle.com"
+            },
+            {
+                "name": "Coursera Machine Learning",
+                "url": "https://www.coursera.org/learn/machine-learning"
+            },
+            {
+                "name": "Python Documentation",
+                "url": "https://docs.python.org/3/"
+            }
+        ],
 
-            "resources": [
+        "related_careers": [
+            "Machine Learning Engineer",
+            "Data Engineer",
+            "AI Engineer"
+        ]
+    },
 
-                {
-                    "name": "Coursera Data Science",
-                    "url": "https://www.coursera.org/browse/data-science"
-                },
 
-                {
-                    "name": "Roadmap.sh",
-                    "url": "https://roadmap.sh/ai-data-scientist"
-                }
+    # --------------------------------------------------------
+    # MACHINE LEARNING ENGINEER
+    # --------------------------------------------------------
 
-            ]
-        },
+    "Machine Learning Engineer": {
+        "skills": [
+            "python",
+            "machine learning",
+            "deep learning",
+            "tensorflow",
+            "pytorch"
+        ],
 
-        "Machine Learning Engineer": {
+        "interests": [
+            "ai",
+            "models",
+            "automation",
+            "research"
+        ],
 
-            "skills": [
-                "python",
-                "machine learning",
-                "deep learning",
-                "tensorflow",
-                "pytorch"
-            ],
+        "roadmap": [
+            "Python",
+            "Statistics",
+            "Machine Learning",
+            "Deep Learning",
+            "TensorFlow",
+            "PyTorch",
+            "MLOps",
+            "ML Projects"
+        ],
 
-            "interests": [
-                "ai",
-                "models",
-                "automation",
-                "research"
-            ],
+        "resources": [
+            {
+                "name": "Coursera Machine Learning",
+                "url": "https://www.coursera.org/learn/machine-learning"
+            },
+            {
+                "name": "DeepLearning.AI",
+                "url": "https://www.deeplearning.ai"
+            },
+            {
+                "name": "TensorFlow Documentation",
+                "url": "https://www.tensorflow.org"
+            }
+        ],
 
-            "related_careers": [
-                "Data Scientist",
-                "AI Engineer",
-                "MLOps Engineer"
-            ],
+        "related_careers": [
+            "Data Scientist",
+            "AI Engineer",
+            "MLOps Engineer"
+        ]
+    },
 
-            "roadmap": [
-                "Python",
-                "Statistics",
-                "Machine Learning",
-                "Deep Learning",
-                "TensorFlow",
-                "PyTorch",
-                "MLOps"
-            ],
 
-            "resources": [
+    # --------------------------------------------------------
+    # WEB DEVELOPER
+    # --------------------------------------------------------
 
-                {
-                    "name": "Coursera Machine Learning",
-                    "url": "https://www.coursera.org/learn/machine-learning"
-                },
+    "Web Developer": {
+        "skills": [
+            "html",
+            "css",
+            "javascript",
+            "react",
+            "django"
+        ],
 
-                {
-                    "name": "DeepLearning.AI",
-                    "url": "https://www.deeplearning.ai"
-                },
+        "interests": [
+            "web",
+            "design",
+            "frontend",
+            "backend"
+        ],
 
-                {
-                    "name": "TensorFlow Documentation",
-                    "url": "https://www.tensorflow.org"
-                }
+        "roadmap": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Backend Development",
+            "Databases",
+            "APIs",
+            "Full Stack Projects"
+        ],
 
-            ]
-        },
+        "resources": [
+            {
+                "name": "MDN Web Docs",
+                "url": "https://developer.mozilla.org"
+            },
+            {
+                "name": "freeCodeCamp",
+                "url": "https://www.freecodecamp.org"
+            },
+            {
+                "name": "React Documentation",
+                "url": "https://react.dev"
+            }
+        ],
 
-        "Web Developer": {
+        "related_careers": [
+            "Frontend Developer",
+            "Backend Developer",
+            "Full Stack Developer"
+        ]
+    },
 
-            "skills": [
-                "html",
-                "css",
-                "javascript",
-                "react",
-                "django"
-            ],
 
-            "interests": [
-                "web",
-                "design",
-                "frontend",
-                "backend"
-            ],
+    # --------------------------------------------------------
+    # CYBER SECURITY ANALYST
+    # --------------------------------------------------------
 
-            "related_careers": [
-                "Frontend Developer",
-                "Backend Developer",
-                "Full Stack Developer"
-            ],
+    "Cyber Security Analyst": {
+        "skills": [
+            "networking",
+            "linux",
+            "security",
+            "python",
+            "cryptography"
+        ],
 
-            "roadmap": [
-                "HTML",
-                "CSS",
-                "JavaScript",
-                "React",
-                "Next.js",
-                "Backend Development",
-                "Database",
-                "Deployment"
-            ],
+        "interests": [
+            "security",
+            "hacking",
+            "systems",
+            "protection"
+        ],
 
-            "resources": [
+        "roadmap": [
+            "Computer Networks",
+            "Linux",
+            "Cyber Security Fundamentals",
+            "Cryptography",
+            "Ethical Hacking",
+            "Security Tools",
+            "Security Projects",
+            "Certifications"
+        ],
 
-                {
-                    "name": "FreeCodeCamp",
-                    "url": "https://www.freecodecamp.org"
-                },
+        "resources": [
+            {
+                "name": "Cisco Networking Academy",
+                "url": "https://www.netacad.com"
+            },
+            {
+                "name": "TryHackMe",
+                "url": "https://tryhackme.com"
+            },
+            {
+                "name": "OWASP",
+                "url": "https://owasp.org"
+            }
+        ],
 
-                {
-                    "name": "MDN Web Docs",
-                    "url": "https://developer.mozilla.org"
-                },
+        "related_careers": [
+            "Security Engineer",
+            "Penetration Tester",
+            "Cloud Security Engineer"
+        ]
+    },
 
-                {
-                    "name": "Next.js Documentation",
-                    "url": "https://nextjs.org/docs"
-                }
 
-            ]
-        },
+    # --------------------------------------------------------
+    # APP DEVELOPER
+    # --------------------------------------------------------
 
-        "Cyber Security Analyst": {
+    "App Developer": {
+        "skills": [
+            "java",
+            "kotlin",
+            "android",
+            "flutter",
+            "dart"
+        ],
 
-            "skills": [
-                "networking",
-                "linux",
-                "security",
-                "python",
-                "cryptography"
-            ],
+        "interests": [
+            "mobile",
+            "apps",
+            "android",
+            "technology"
+        ],
 
-            "interests": [
-                "security",
-                "hacking",
-                "systems",
-                "protection"
-            ],
+        "roadmap": [
+            "Programming Fundamentals",
+            "Java or Kotlin",
+            "Android Development",
+            "UI Design",
+            "APIs",
+            "Databases",
+            "Authentication",
+            "Mobile App Projects"
+        ],
 
-            "related_careers": [
-                "Security Engineer",
-                "Penetration Tester",
-                "Cloud Security Engineer"
-            ],
+        "resources": [
+            {
+                "name": "Android Developers",
+                "url": "https://developer.android.com"
+            },
+            {
+                "name": "Flutter Documentation",
+                "url": "https://docs.flutter.dev"
+            },
+            {
+                "name": "Kotlin Documentation",
+                "url": "https://kotlinlang.org/docs/home.html"
+            }
+        ],
 
-            "roadmap": [
-                "Computer Networks",
-                "Linux",
-                "Python",
-                "Cyber Security Basics",
-                "Ethical Hacking",
-                "Cryptography",
-                "Penetration Testing"
-            ],
+        "related_careers": [
+            "Android Developer",
+            "iOS Developer",
+            "Mobile App Engineer"
+        ]
+    },
 
-            "resources": [
 
-                {
-                    "name": "TryHackMe",
-                    "url": "https://tryhackme.com"
-                },
+    # ========================================================
+    # NEW CAREERS
+    # ========================================================
 
-                {
-                    "name": "Hack The Box",
-                    "url": "https://www.hackthebox.com"
-                },
+    # --------------------------------------------------------
+    # AI ENGINEER
+    # --------------------------------------------------------
 
-                {
-                    "name": "OWASP",
-                    "url": "https://owasp.org"
-                }
+    "AI Engineer": {
+        "skills": [
+            "python",
+            "machine learning",
+            "deep learning",
+            "tensorflow",
+            "pytorch",
+            "generative ai"
+        ],
 
-            ]
-        },
+        "interests": [
+            "ai",
+            "automation",
+            "models",
+            "generative ai",
+            "intelligent systems"
+        ],
 
-        "App Developer": {
+        "roadmap": [
+            "Python",
+            "Statistics",
+            "Machine Learning",
+            "Deep Learning",
+            "Neural Networks",
+            "Generative AI",
+            "LLMs",
+            "AI Projects"
+        ],
 
-            "skills": [
-                "flutter",
-                "dart",
-                "kotlin",
-                "java",
-                "react native"
-            ],
+        "resources": [
+            {
+                "name": "DeepLearning.AI",
+                "url": "https://www.deeplearning.ai"
+            },
+            {
+                "name": "Hugging Face",
+                "url": "https://huggingface.co"
+            },
+            {
+                "name": "PyTorch Documentation",
+                "url": "https://pytorch.org/docs/"
+            }
+        ],
 
-            "interests": [
-                "mobile",
-                "apps",
-                "ui",
-                "ux"
-            ],
+        "related_careers": [
+            "Machine Learning Engineer",
+            "Data Scientist",
+            "MLOps Engineer"
+        ]
+    },
 
-            "related_careers": [
-                "Android Developer",
-                "iOS Developer",
-                "Mobile App Engineer"
-            ],
 
-            "roadmap": [
-                "Programming Basics",
-                "Flutter",
-                "Dart",
-                "UI/UX Design",
-                "Firebase",
-                "State Management",
-                "App Deployment"
-            ],
+    # --------------------------------------------------------
+    # DATA ENGINEER
+    # --------------------------------------------------------
 
-            "resources": [
+    "Data Engineer": {
+        "skills": [
+            "python",
+            "sql",
+            "databases",
+            "spark",
+            "etl"
+        ],
 
-                {
-                    "name": "Flutter Documentation",
-                    "url": "https://docs.flutter.dev"
-                },
+        "interests": [
+            "data",
+            "databases",
+            "analytics",
+            "pipelines",
+            "big data"
+        ],
 
-                {
-                    "name": "Firebase Documentation",
-                    "url": "https://firebase.google.com/docs"
-                },
+        "roadmap": [
+            "Python",
+            "SQL",
+            "Database Fundamentals",
+            "ETL",
+            "Data Warehousing",
+            "Apache Spark",
+            "Cloud Data Platforms",
+            "Data Engineering Projects"
+        ],
 
-                {
-                    "name": "React Native Documentation",
-                    "url": "https://reactnative.dev"
-                }
+        "resources": [
+            {
+                "name": "Apache Spark",
+                "url": "https://spark.apache.org"
+            },
+            {
+                "name": "PostgreSQL Documentation",
+                "url": "https://www.postgresql.org/docs/"
+            },
+            {
+                "name": "Kaggle",
+                "url": "https://www.kaggle.com"
+            }
+        ],
 
-            ]
-        }
+        "related_careers": [
+            "Data Scientist",
+            "Machine Learning Engineer",
+            "Cloud Engineer"
+        ]
+    },
 
+
+    # --------------------------------------------------------
+    # MLOPS ENGINEER
+    # --------------------------------------------------------
+
+    "MLOps Engineer": {
+        "skills": [
+            "python",
+            "machine learning",
+            "docker",
+            "kubernetes",
+            "aws"
+        ],
+
+        "interests": [
+            "ai",
+            "deployment",
+            "automation",
+            "cloud",
+            "infrastructure"
+        ],
+
+        "roadmap": [
+            "Python",
+            "Machine Learning Fundamentals",
+            "Git",
+            "Docker",
+            "Kubernetes",
+            "CI/CD",
+            "Cloud Computing",
+            "ML Deployment"
+        ],
+
+        "resources": [
+            {
+                "name": "Docker Documentation",
+                "url": "https://docs.docker.com"
+            },
+            {
+                "name": "Kubernetes Documentation",
+                "url": "https://kubernetes.io/docs/"
+            },
+            {
+                "name": "AWS",
+                "url": "https://aws.amazon.com"
+            }
+        ],
+
+        "related_careers": [
+            "Machine Learning Engineer",
+            "AI Engineer",
+            "Cloud Engineer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # FRONTEND DEVELOPER
+    # --------------------------------------------------------
+
+    "Frontend Developer": {
+        "skills": [
+            "html",
+            "css",
+            "javascript",
+            "react",
+            "typescript"
+        ],
+
+        "interests": [
+            "web",
+            "design",
+            "ui",
+            "frontend",
+            "user experience"
+        ],
+
+        "roadmap": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "TypeScript",
+            "React",
+            "Next.js",
+            "Responsive Design",
+            "Frontend Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "MDN Web Docs",
+                "url": "https://developer.mozilla.org"
+            },
+            {
+                "name": "React Documentation",
+                "url": "https://react.dev"
+            },
+            {
+                "name": "Next.js Documentation",
+                "url": "https://nextjs.org/docs"
+            }
+        ],
+
+        "related_careers": [
+            "Web Developer",
+            "Full Stack Developer",
+            "Backend Developer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # BACKEND DEVELOPER
+    # --------------------------------------------------------
+
+    "Backend Developer": {
+        "skills": [
+            "python",
+            "java",
+            "node.js",
+            "sql",
+            "api"
+        ],
+
+        "interests": [
+            "backend",
+            "servers",
+            "databases",
+            "apis",
+            "systems"
+        ],
+
+        "roadmap": [
+            "Programming Fundamentals",
+            "Backend Language",
+            "Databases",
+            "REST APIs",
+            "Authentication",
+            "Backend Frameworks",
+            "Cloud Deployment",
+            "Backend Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "FastAPI Documentation",
+                "url": "https://fastapi.tiangolo.com"
+            },
+            {
+                "name": "Node.js Documentation",
+                "url": "https://nodejs.org/docs/latest/api/"
+            },
+            {
+                "name": "PostgreSQL Documentation",
+                "url": "https://www.postgresql.org/docs/"
+            }
+        ],
+
+        "related_careers": [
+            "Web Developer",
+            "Full Stack Developer",
+            "Cloud Engineer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # FULL STACK DEVELOPER
+    # --------------------------------------------------------
+
+    "Full Stack Developer": {
+        "skills": [
+            "html",
+            "css",
+            "javascript",
+            "react",
+            "node.js",
+            "sql"
+        ],
+
+        "interests": [
+            "web",
+            "frontend",
+            "backend",
+            "applications",
+            "software development"
+        ],
+
+        "roadmap": [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "React",
+            "Backend Development",
+            "Databases",
+            "REST APIs",
+            "Authentication",
+            "Full Stack Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "freeCodeCamp",
+                "url": "https://www.freecodecamp.org"
+            },
+            {
+                "name": "React Documentation",
+                "url": "https://react.dev"
+            },
+            {
+                "name": "Node.js Documentation",
+                "url": "https://nodejs.org"
+            }
+        ],
+
+        "related_careers": [
+            "Frontend Developer",
+            "Backend Developer",
+            "Web Developer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # SECURITY ENGINEER
+    # --------------------------------------------------------
+
+    "Security Engineer": {
+        "skills": [
+            "networking",
+            "linux",
+            "security",
+            "python",
+            "firewalls"
+        ],
+
+        "interests": [
+            "security",
+            "networks",
+            "systems",
+            "protection",
+            "infrastructure"
+        ],
+
+        "roadmap": [
+            "Networking",
+            "Linux",
+            "Cyber Security",
+            "Firewalls",
+            "Identity and Access Management",
+            "Security Monitoring",
+            "Cloud Security",
+            "Security Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "Cisco Networking Academy",
+                "url": "https://www.netacad.com"
+            },
+            {
+                "name": "OWASP",
+                "url": "https://owasp.org"
+            },
+            {
+                "name": "Cloudflare Learning Center",
+                "url": "https://www.cloudflare.com/learning/"
+            }
+        ],
+
+        "related_careers": [
+            "Cyber Security Analyst",
+            "Penetration Tester",
+            "Cloud Security Engineer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # CLOUD SECURITY ENGINEER
+    # --------------------------------------------------------
+
+    "Cloud Security Engineer": {
+        "skills": [
+            "aws",
+            "networking",
+            "linux",
+            "security",
+            "iam"
+        ],
+
+        "interests": [
+            "cloud",
+            "security",
+            "aws",
+            "infrastructure",
+            "protection"
+        ],
+
+        "roadmap": [
+            "Networking",
+            "Linux",
+            "Cloud Fundamentals",
+            "AWS",
+            "Identity and Access Management",
+            "Cloud Security",
+            "Security Monitoring",
+            "Cloud Security Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "AWS Training",
+                "url": "https://aws.amazon.com/training/"
+            },
+            {
+                "name": "AWS Security Documentation",
+                "url": "https://docs.aws.amazon.com/security/"
+            },
+            {
+                "name": "OWASP",
+                "url": "https://owasp.org"
+            }
+        ],
+
+        "related_careers": [
+            "Security Engineer",
+            "Cyber Security Analyst",
+            "Cloud Engineer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # ANDROID DEVELOPER
+    # --------------------------------------------------------
+
+    "Android Developer": {
+        "skills": [
+            "java",
+            "kotlin",
+            "android",
+            "xml",
+            "firebase"
+        ],
+
+        "interests": [
+            "android",
+            "mobile",
+            "apps",
+            "ui",
+            "technology"
+        ],
+
+        "roadmap": [
+            "Java or Kotlin",
+            "Android Studio",
+            "Android UI",
+            "Activities and Fragments",
+            "APIs",
+            "Firebase",
+            "Authentication",
+            "Android Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "Android Developers",
+                "url": "https://developer.android.com"
+            },
+            {
+                "name": "Kotlin Documentation",
+                "url": "https://kotlinlang.org/docs/home.html"
+            },
+            {
+                "name": "Firebase Documentation",
+                "url": "https://firebase.google.com/docs"
+            }
+        ],
+
+        "related_careers": [
+            "App Developer",
+            "Mobile App Engineer",
+            "Full Stack Developer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # IOS DEVELOPER
+    # --------------------------------------------------------
+
+    "iOS Developer": {
+        "skills": [
+            "swift",
+            "ios",
+            "xcode",
+            "swiftui",
+            "objective-c"
+        ],
+
+        "interests": [
+            "ios",
+            "mobile",
+            "apps",
+            "apple",
+            "ui"
+        ],
+
+        "roadmap": [
+            "Swift",
+            "Xcode",
+            "SwiftUI",
+            "iOS App Architecture",
+            "APIs",
+            "Local Storage",
+            "Authentication",
+            "iOS Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "Apple Developer",
+                "url": "https://developer.apple.com"
+            },
+            {
+                "name": "Swift Documentation",
+                "url": "https://www.swift.org/documentation/"
+            },
+            {
+                "name": "SwiftUI Documentation",
+                "url": "https://developer.apple.com/xcode/swiftui/"
+            }
+        ],
+
+        "related_careers": [
+            "App Developer",
+            "Mobile App Engineer",
+            "Frontend Developer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # MOBILE APP ENGINEER
+    # --------------------------------------------------------
+
+    "Mobile App Engineer": {
+        "skills": [
+            "flutter",
+            "dart",
+            "android",
+            "ios",
+            "firebase"
+        ],
+
+        "interests": [
+            "mobile",
+            "apps",
+            "cross platform",
+            "ui",
+            "technology"
+        ],
+
+        "roadmap": [
+            "Programming Fundamentals",
+            "Dart",
+            "Flutter",
+            "Mobile UI",
+            "State Management",
+            "APIs",
+            "Firebase",
+            "Mobile Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "Flutter Documentation",
+                "url": "https://docs.flutter.dev"
+            },
+            {
+                "name": "Dart Documentation",
+                "url": "https://dart.dev/guides"
+            },
+            {
+                "name": "Firebase Documentation",
+                "url": "https://firebase.google.com/docs"
+            }
+        ],
+
+        "related_careers": [
+            "App Developer",
+            "Android Developer",
+            "iOS Developer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # PENETRATION TESTER
+    # --------------------------------------------------------
+
+    "Penetration Tester": {
+        "skills": [
+            "linux",
+            "networking",
+            "python",
+            "ethical hacking",
+            "web security"
+        ],
+
+        "interests": [
+            "hacking",
+            "security",
+            "penetration testing",
+            "networks",
+            "web security"
+        ],
+
+        "roadmap": [
+            "Networking",
+            "Linux",
+            "Cyber Security Fundamentals",
+            "Web Security",
+            "Ethical Hacking",
+            "Penetration Testing",
+            "Security Tools",
+            "Security Labs"
+        ],
+
+        "resources": [
+            {
+                "name": "TryHackMe",
+                "url": "https://tryhackme.com"
+            },
+            {
+                "name": "OWASP",
+                "url": "https://owasp.org"
+            },
+            {
+                "name": "PortSwigger Web Security Academy",
+                "url": "https://portswigger.net/web-security"
+            }
+        ],
+
+        "related_careers": [
+            "Cyber Security Analyst",
+            "Security Engineer",
+            "Cloud Security Engineer"
+        ]
+    },
+
+
+    # --------------------------------------------------------
+    # CLOUD ENGINEER
+    # --------------------------------------------------------
+
+    "Cloud Engineer": {
+        "skills": [
+            "aws",
+            "azure",
+            "linux",
+            "docker",
+            "kubernetes"
+        ],
+
+        "interests": [
+            "cloud",
+            "infrastructure",
+            "deployment",
+            "automation",
+            "servers"
+        ],
+
+        "roadmap": [
+            "Linux",
+            "Networking",
+            "Cloud Fundamentals",
+            "AWS or Azure",
+            "Docker",
+            "Kubernetes",
+            "CI/CD",
+            "Cloud Projects"
+        ],
+
+        "resources": [
+            {
+                "name": "AWS Training",
+                "url": "https://aws.amazon.com/training/"
+            },
+            {
+                "name": "Microsoft Learn",
+                "url": "https://learn.microsoft.com"
+            },
+            {
+                "name": "Docker Documentation",
+                "url": "https://docs.docker.com"
+            }
+        ],
+
+        "related_careers": [
+            "MLOps Engineer",
+            "Backend Developer",
+            "Cloud Security Engineer"
+        ]
     }
 
+}
+
+
+# ============================================================
+# HELPER FUNCTIONS
+# ============================================================
+
+def normalize(items):
+    """
+    Convert user input into lowercase clean values.
+    """
+
+    return [
+        item.strip().lower()
+        for item in items
+        if item and item.strip()
+    ]
+
+
+# ============================================================
+# GET CAREERS
+# ============================================================
+
+def get_careers():
+    return CAREERS
+
+
+# ============================================================
+# RECOMMENDATION ENGINE
+# ============================================================
 
 def recommend_career(user_skills, user_interests):
 
-    careers = get_careers()
+    user_skills = normalize(user_skills)
+    user_interests = normalize(user_interests)
 
     best_match = None
-    max_score = 0
+    max_score = -1
 
     best_details = {
         "matched_skills": [],
@@ -278,45 +1041,41 @@ def recommend_career(user_skills, user_interests):
         "match_percentage": 0
     }
 
-    # Convert user input to lowercase
-    normalized_skills = [
-        skill.strip().lower()
-        for skill in user_skills
-    ]
+    # Store information about every career
+    career_scores = []
 
-    normalized_interests = [
-        interest.strip().lower()
-        for interest in user_interests
-    ]
+    for career_name, career in CAREERS.items():
 
-    for career, data in careers.items():
+        career_skills = normalize(career["skills"])
+        career_interests = normalize(career["interests"])
 
-        score = 0
+        matched_skills = [
+            skill
+            for skill in career_skills
+            if skill in user_skills
+        ]
 
-        matched_skills = []
-        missing_skills = []
-        matched_interests = []
+        matched_interests = [
+            interest
+            for interest in career_interests
+            if interest in user_interests
+        ]
 
-        # Check skills
-        for skill in data["skills"]:
+        missing_skills = [
+            skill
+            for skill in career_skills
+            if skill not in user_skills
+        ]
 
-            if skill in normalized_skills:
-                score += 2
-                matched_skills.append(skill)
-            else:
-                missing_skills.append(skill)
+        # Skills have higher weight than interests
+        score = (
+            len(matched_skills) * 2
+            + len(matched_interests)
+        )
 
-        # Check interests
-        for interest in normalized_interests:
-
-            if interest in data["interests"]:
-                score += 1
-                matched_interests.append(interest)
-
-        # Calculate maximum possible score
         max_possible_score = (
-            len(data["skills"]) * 2
-            + len(data["interests"])
+            len(career_skills) * 2
+            + len(career_interests)
         )
 
         if max_possible_score > 0:
@@ -326,11 +1085,20 @@ def recommend_career(user_skills, user_interests):
         else:
             match_percentage = 0
 
-        # Update best career
-        if score > max_score:
+        # Save this career's complete result
+        career_scores.append({
+            "career": career_name,
+            "score": score,
+            "match_percentage": match_percentage,
+            "matched_skills": matched_skills,
+            "missing_skills": missing_skills,
+            "matched_interests": matched_interests
+        })
 
+        # Find the primary recommendation
+        if score > max_score:
             max_score = score
-            best_match = career
+            best_match = career_name
 
             best_details = {
                 "matched_skills": matched_skills,
@@ -339,9 +1107,22 @@ def recommend_career(user_skills, user_interests):
                 "match_percentage": match_percentage
             }
 
+    # Sort every career from highest score to lowest score
+    career_scores.sort(
+        key=lambda item: (
+            item["score"],
+            item["match_percentage"]
+        ),
+        reverse=True
+    )
+
+    # Return the top 3 career matches
+    top_matches = career_scores[:3]
+
     return (
         best_match,
         max_score,
-        careers,
-        best_details
+        CAREERS,
+        best_details,
+        top_matches
     )
