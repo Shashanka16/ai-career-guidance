@@ -15,6 +15,8 @@ export default function Dashboard() {
   >([]);
   const [chatLoading, setChatLoading] = useState(false);
 
+  // ---------------- LOAD HISTORY ----------------
+
   const loadHistory = async () => {
     try {
       const userId = localStorage.getItem("userId");
@@ -38,6 +40,8 @@ export default function Dashboard() {
     }
   };
 
+  // ---------------- LOGIN CHECK ----------------
+
   useEffect(() => {
     const userId = localStorage.getItem("userId");
 
@@ -48,6 +52,8 @@ export default function Dashboard() {
 
     loadHistory();
   }, []);
+
+  // ---------------- RECOMMENDATION ----------------
 
   const handleRecommend = async () => {
     try {
@@ -67,10 +73,12 @@ export default function Dashboard() {
           },
           body: JSON.stringify({
             user_id: Number(userId),
+
             skills: skills
               .split(",")
               .map((s) => s.trim())
               .filter((s) => s !== ""),
+
             interests: interests
               .split(",")
               .map((i) => i.trim())
@@ -125,8 +133,12 @@ export default function Dashboard() {
           body: JSON.stringify({
             message: userMessage,
 
-            // Send the recommended career to the AI
-            career: result?.recommended_career || "",
+            // Use current recommendation first.
+            // Otherwise use latest recommendation from history.
+            career:
+              result?.recommended_career ||
+              history[history.length - 1]?.career ||
+              "",
           }),
         }
       );
@@ -160,30 +172,40 @@ export default function Dashboard() {
     }
   };
 
+  // ---------------- DASHBOARD UI ----------------
+
   return (
     <main className="min-h-screen bg-slate-950 text-white p-10">
 
       {/* NAVBAR */}
 
-      <nav className="flex justify-between items-center mb-10">
-        <h1 className="text-4xl font-bold text-blue-400">
-          AI Career Guidance
-        </h1>
+      <nav className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 mb-10">
+
+        <div>
+          <h1 className="text-4xl font-bold text-blue-400">
+            AI Career Guidance
+          </h1>
+
+          <p className="text-gray-400 mt-2">
+            AI-Powered Career Discovery & Personalized Learning
+          </p>
+        </div>
 
         <button
           onClick={() => {
             localStorage.clear();
             window.location.href = "/login";
           }}
-          className="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-lg"
+          className="bg-red-600 hover:bg-red-700 transition px-5 py-2 rounded-lg"
         >
           Logout
         </button>
+
       </nav>
 
       <div className="max-w-4xl mx-auto">
 
-        {/* RECOMMENDATION FORM */}
+        {/* ==================== RECOMMENDATION FORM ==================== */}
 
         <div className="bg-slate-900 rounded-2xl p-8 shadow-xl">
 
@@ -192,6 +214,8 @@ export default function Dashboard() {
           </h2>
 
           <div className="space-y-5">
+
+            {/* SKILLS */}
 
             <div>
               <label className="block mb-2 text-lg">
@@ -208,6 +232,8 @@ export default function Dashboard() {
               />
             </div>
 
+            {/* INTERESTS */}
+
             <div>
               <label className="block mb-2 text-lg">
                 Interests
@@ -223,6 +249,8 @@ export default function Dashboard() {
               />
             </div>
 
+            {/* RECOMMEND BUTTON */}
+
             <button
               onClick={handleRecommend}
               className="w-full bg-blue-600 hover:bg-blue-700 transition p-4 rounded-lg font-semibold text-lg"
@@ -231,14 +259,15 @@ export default function Dashboard() {
             </button>
 
           </div>
+
         </div>
 
-        {/* RECOMMENDATION RESULT */}
+        {/* ==================== RECOMMENDATION RESULT ==================== */}
 
         {result && (
           <div className="bg-slate-900 rounded-2xl mt-10 p-8 shadow-xl">
 
-            {/* CAREER */}
+            {/* RECOMMENDED CAREER */}
 
             <h2 className="text-3xl font-bold text-green-400">
               {result.recommended_career}
@@ -276,117 +305,175 @@ export default function Dashboard() {
             {/* CONFIDENCE SCORE */}
 
             <p className="mt-5 text-xl">
+
               Confidence Score:
 
               <span className="font-bold text-blue-400">
                 {" "}
                 {result.confidence_score}
               </span>
-            </p>
-            {/* TOP 3 CAREER MATCHES */}
 
-{result.top_matches?.length > 0 && (
-  <div className="mt-8">
-    <h3 className="text-2xl font-semibold mb-4">
-      🏆 Top Career Matches
-    </h3>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {result.top_matches.map((match: any, index: number) => (
-        <div
-          key={index}
-          className="bg-slate-800 p-5 rounded-xl border border-slate-700"
-        >
-          <h4 className="text-lg font-semibold text-blue-400">
-            {index + 1}. {match.career}
-          </h4>
-
-          <p className="text-green-400 font-bold mt-2">
-            Match: {match.match_percentage}%
-          </p>
-
-          <p className="text-gray-400 mt-1">
-            Score: {match.score}
-          </p>
-
-          <div className="mt-4">
-            <p className="text-sm text-gray-400 mb-2">
-              Matching Skills
             </p>
 
-            {match.matched_skills?.length > 0 ? (
-              <div className="flex flex-wrap gap-2">
-                {match.matched_skills.map(
-                  (skill: string, skillIndex: number) => (
-                    <span
-                      key={skillIndex}
-                      className="bg-green-700 px-2 py-1 rounded text-sm"
-                    >
-                      {skill}
-                    </span>
-                  )
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-500 text-sm">
-                No matching skills yet.
-              </p>
-            )}
-          </div>
+            {/* ==================== TOP 3 CAREER MATCHES ==================== */}
 
-          <button
-            onClick={() => {
-              window.location.href =
-                `/career/${encodeURIComponent(match.career)}`;
-            }}
-            className="mt-5 w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold"
-          >
-            Explore Career
-          </button>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
+            {result.top_matches?.length > 0 && (
+              <div className="mt-10">
 
-            {/* MATCHED SKILLS */}
+                <div className="mb-6">
 
-            <div className="mt-8">
+                  <h3 className="text-2xl font-bold">
+                    🏆 Top Career Matches
+                  </h3>
 
-              <h3 className="text-2xl font-semibold mb-3">
-                ✅ Skills You Already Have
-              </h3>
+                  <p className="text-gray-400 mt-1">
+                    Based on your skills and interests
+                  </p>
 
-              {result.matched_skills?.length > 0 ? (
+                </div>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-                  {result.matched_skills.map(
-                    (skill: string, index: number) => (
+                  {result.top_matches.map(
+                    (match: any, index: number) => (
 
-                      <span
+                      <div
                         key={index}
-                        className="bg-green-600 px-4 py-2 rounded-lg"
+                        className={`relative bg-slate-800 p-6 rounded-2xl border transition duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                          index === 0
+                            ? "border-blue-500 shadow-lg shadow-blue-500/10"
+                            : "border-slate-700"
+                        }`}
                       >
-                        {skill}
-                      </span>
+
+                        {/* RANK */}
+
+                        <div className="flex items-center justify-between">
+
+                          <span
+                            className={`text-xs font-bold px-3 py-1 rounded-full ${
+                              index === 0
+                                ? "bg-blue-600 text-white"
+                                : "bg-slate-700 text-gray-300"
+                            }`}
+                          >
+                            #{index + 1}
+                          </span>
+
+                          {index === 0 && (
+                            <span className="text-xs text-blue-400 font-semibold">
+                              Best Match
+                            </span>
+                          )}
+
+                        </div>
+
+                        {/* CAREER NAME */}
+
+                        <h4 className="text-xl font-bold text-white mt-5">
+                          {match.career}
+                        </h4>
+
+                        {/* MATCH PERCENTAGE */}
+
+                        <div className="mt-4">
+
+                          <div className="flex justify-between text-sm mb-2">
+
+                            <span className="text-gray-400">
+                              Career Match
+                            </span>
+
+                            <span className="text-green-400 font-bold">
+                              {match.match_percentage}%
+                            </span>
+
+                          </div>
+
+                          {/* PROGRESS BAR */}
+
+                          <div className="w-full bg-slate-700 rounded-full h-2">
+
+                            <div
+                              className="bg-green-500 h-2 rounded-full transition-all duration-500"
+                              style={{
+                                width: `${match.match_percentage}%`,
+                              }}
+                            />
+
+                          </div>
+
+                        </div>
+
+                        {/* MATCHING SKILLS */}
+
+                        <div className="mt-6">
+
+                          <p className="text-sm font-semibold text-gray-300 mb-3">
+                            Matching Skills
+                          </p>
+
+                          {match.matched_skills?.length > 0 ? (
+
+                            <div className="flex flex-wrap gap-2">
+
+                              {match.matched_skills.map(
+                                (
+                                  skill: string,
+                                  skillIndex: number
+                                ) => (
+
+                                  <span
+                                    key={skillIndex}
+                                    className="bg-green-900/60 text-green-300 border border-green-700/50 px-2.5 py-1 rounded-lg text-xs"
+                                  >
+                                    ✓ {skill}
+                                  </span>
+
+                                )
+                              )}
+
+                            </div>
+
+                          ) : (
+
+                            <p className="text-gray-500 text-sm">
+                              No matching skills yet.
+                            </p>
+
+                          )}
+
+                        </div>
+
+                        {/* EXPLORE BUTTON */}
+
+                        <button
+                          onClick={() => {
+                            window.location.href =
+                              `/career/${encodeURIComponent(
+                                match.career
+                              )}`;
+                          }}
+                          className={`mt-6 w-full px-4 py-2.5 rounded-xl font-semibold transition ${
+                            index === 0
+                              ? "bg-blue-600 hover:bg-blue-700"
+                              : "bg-slate-700 hover:bg-slate-600"
+                          }`}
+                        >
+                          Explore Career →
+                        </button>
+
+                      </div>
 
                     )
                   )}
 
                 </div>
 
-              ) : (
+              </div>
+            )}
 
-                <p className="text-gray-400">
-                  No matching skills found yet.
-                </p>
-
-              )}
-
-            </div>
-
-            {/* MISSING SKILLS */}
+            {/* ==================== MISSING SKILLS ==================== */}
 
             <div className="mt-8">
 
@@ -423,7 +510,7 @@ export default function Dashboard() {
 
             </div>
 
-            {/* MATCHED INTERESTS */}
+            {/* ==================== MATCHED INTERESTS ==================== */}
 
             <div className="mt-8">
 
@@ -460,7 +547,7 @@ export default function Dashboard() {
 
             </div>
 
-            {/* ROADMAP */}
+            {/* ==================== ROADMAP ==================== */}
 
             <div className="mt-8">
 
@@ -470,11 +557,13 @@ export default function Dashboard() {
 
               <ul className="list-disc list-inside space-y-2">
 
-                {result.roadmap.map(
+                {result.roadmap?.map(
                   (item: string, index: number) => (
+
                     <li key={index}>
                       {item}
                     </li>
+
                   )
                 )}
 
@@ -482,7 +571,7 @@ export default function Dashboard() {
 
             </div>
 
-            {/* RELATED CAREERS */}
+            {/* ==================== RELATED CAREERS ==================== */}
 
             <div className="mt-8">
 
@@ -499,7 +588,9 @@ export default function Dashboard() {
                       key={index}
                       onClick={() => {
                         window.location.href =
-                          `/career/${encodeURIComponent(career)}`;
+                          `/career/${encodeURIComponent(
+                            career
+                          )}`;
                       }}
                       className="text-left bg-slate-800 p-5 rounded-xl hover:bg-slate-700 transition"
                     >
@@ -521,7 +612,7 @@ export default function Dashboard() {
 
             </div>
 
-            {/* RESOURCES */}
+            {/* ==================== RESOURCES ==================== */}
 
             <div className="mt-8">
 
@@ -531,7 +622,7 @@ export default function Dashboard() {
 
               <ul className="space-y-2">
 
-                {result.resources.map(
+                {result.resources?.map(
                   (resource: any, index: number) => (
 
                     <li key={index}>
@@ -540,7 +631,7 @@ export default function Dashboard() {
                         href={resource.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-400 underline"
+                        className="text-blue-400 underline hover:text-blue-300"
                       >
                         {resource.name}
                       </a>
@@ -557,7 +648,7 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* RECOMMENDATION HISTORY */}
+        {/* ==================== RECOMMENDATION HISTORY ==================== */}
 
         <div className="bg-slate-900 rounded-2xl mt-10 p-8 shadow-xl">
 
@@ -602,7 +693,7 @@ export default function Dashboard() {
 
         </div>
 
-        {/* CAREER CHATBOT */}
+        {/* ==================== CAREER CHATBOT ==================== */}
 
         <div className="bg-slate-900 rounded-2xl mt-10 p-8 shadow-xl">
 

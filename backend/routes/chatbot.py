@@ -21,13 +21,23 @@ class ChatMessage(BaseModel):
 
 @router.post("/chat")
 def chat(data: ChatMessage):
+
     try:
+
+        career = data.career.strip() if data.career else ""
+
+        if career:
+            career_context = career
+        else:
+            career_context = "No recommended career is currently available."
+
         response = client.responses.create(
             model="gpt-5.6-luna",
+
             instructions="""
 You are an AI Career Assistant for an AI Career Guidance Platform.
 
-Help students and beginners with:
+You help students and beginners with:
 
 - Career selection
 - Career roadmaps
@@ -39,6 +49,20 @@ Help students and beginners with:
 - Certifications
 - Career-related questions
 
+IMPORTANT CONTEXT RULE:
+
+The user's recommended career will be provided separately.
+
+If a recommended career is provided, you MUST use it as the primary career context when answering the user's question.
+
+Do NOT say that the career is unspecified if a recommended career is provided.
+
+For example, if the recommended career is "Machine Learning Engineer"
+and the user asks "What should I learn next?", answer specifically
+for a Machine Learning Engineer.
+
+Only discuss other careers when the user explicitly asks about them.
+
 Give practical and beginner-friendly answers.
 
 When recommending a career:
@@ -48,10 +72,12 @@ When recommending a career:
 
 Keep answers clear, structured, and reasonably concise.
 """,
-            input=f"""
-The user's recommended career is: {data.career or "Not specified"}
 
-User's question:
+            input=f"""
+RECOMMENDED CAREER:
+{career_context}
+
+USER QUESTION:
 {data.message}
 """
         )
@@ -61,6 +87,7 @@ User's question:
         }
 
     except Exception as error:
+
         print("OpenAI error:", error)
 
         raise HTTPException(
