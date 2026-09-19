@@ -7,13 +7,7 @@ export default function Dashboard() {
   const [interests, setInterests] = useState("");
   const [result, setResult] = useState<any>(null);
   const [history, setHistory] = useState<any[]>([]);
-
-  // Chatbot states
-  const [message, setMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState<
-    { sender: string; text: string }[]
-  >([]);
-  const [chatLoading, setChatLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // ---------------- LOAD HISTORY ----------------
 
@@ -64,6 +58,13 @@ export default function Dashboard() {
         return;
       }
 
+      if (!skills.trim() && !interests.trim()) {
+        alert("Please enter at least one skill or interest.");
+        return;
+      }
+
+      setLoading(true);
+
       const response = await fetch(
         "http://127.0.0.1:8000/recommend",
         {
@@ -96,238 +97,269 @@ export default function Dashboard() {
 
       setResult(data);
 
-      loadHistory();
+      await loadHistory();
     } catch (error) {
       console.log(error);
-      alert("Backend is not running.");
+      alert("Unable to connect to the backend.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ---------------- CHATBOT ----------------
+  // ---------------- LOGOUT ----------------
 
-  const handleChat = async () => {
-    if (!message.trim()) return;
-
-    const userMessage = message.trim();
-
-    // Add user's message
-    setChatMessages((previous) => [
-      ...previous,
-      {
-        sender: "user",
-        text: userMessage,
-      },
-    ]);
-
-    setMessage("");
-    setChatLoading(true);
-
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:8000/chat",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: userMessage,
-
-            // Use current recommendation first.
-            // Otherwise use latest recommendation from history.
-            career:
-              result?.recommended_career ||
-              history[history.length - 1]?.career ||
-              "",
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || "Chatbot error");
-      }
-
-      // Add chatbot response
-      setChatMessages((previous) => [
-        ...previous,
-        {
-          sender: "bot",
-          text: data.response,
-        },
-      ]);
-    } catch (error) {
-      console.log(error);
-
-      setChatMessages((previous) => [
-        ...previous,
-        {
-          sender: "bot",
-          text: "Unable to connect to the chatbot.",
-        },
-      ]);
-    } finally {
-      setChatLoading(false);
-    }
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/login";
   };
 
   // ---------------- DASHBOARD UI ----------------
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white p-10">
+    <main className="min-h-screen bg-slate-50 text-slate-900">
 
-      {/* NAVBAR */}
+      {/* ==================== NAVBAR ==================== */}
 
-      <nav className="flex flex-col md:flex-row justify-between items-start md:items-center gap-5 mb-10">
+      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
 
-        <div>
-          <h1 className="text-4xl font-bold text-blue-400">
-            AI Career Guidance
-          </h1>
+        <div className="max-w-7xl mx-auto px-6 py-4">
 
-          <p className="text-gray-400 mt-2">
-            AI-Powered Career Discovery & Personalized Learning
-          </p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+
+            {/* LOGO */}
+
+            <div className="flex items-center gap-3">
+
+              <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl">
+                AI
+              </div>
+
+              <div>
+                <h1 className="text-xl font-bold text-slate-900">
+                  AI Career Guidance
+                </h1>
+
+                <p className="text-sm text-slate-500">
+                  Personalized Career Discovery
+                </p>
+              </div>
+
+            </div>
+
+            {/* NAVIGATION */}
+
+            <div className="flex items-center gap-3">
+
+              <button
+                className="px-4 py-2 rounded-lg bg-blue-50 text-blue-600 font-semibold"
+              >
+                Dashboard
+              </button>
+
+              <button
+                onClick={() => {
+                  window.location.href = "/dashboard/chat";
+                }}
+                className="px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 transition font-medium"
+              >
+                Career Assistant
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white transition font-medium"
+              >
+                Logout
+              </button>
+
+            </div>
+
+          </div>
+
         </div>
-
-        <button
-          onClick={() => {
-            localStorage.clear();
-            window.location.href = "/login";
-          }}
-          className="bg-red-600 hover:bg-red-700 transition px-5 py-2 rounded-lg"
-        >
-          Logout
-        </button>
 
       </nav>
 
-      <div className="max-w-4xl mx-auto">
+      {/* ==================== MAIN CONTENT ==================== */}
 
-        {/* ==================== RECOMMENDATION FORM ==================== */}
+      <div className="max-w-7xl mx-auto px-6 py-10">
 
-        <div className="bg-slate-900 rounded-2xl p-8 shadow-xl">
+        {/* PAGE HEADER */}
 
-          <h2 className="text-2xl font-semibold mb-6">
-            Enter Your Details
+        <div className="mb-10">
+
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
+            Career Dashboard
           </h2>
 
-          <div className="space-y-5">
+          <p className="text-slate-500 mt-2 text-lg">
+            Discover career paths based on your skills and interests.
+          </p>
+
+        </div>
+
+        {/* ==================== INPUT SECTION ==================== */}
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+
+          <div className="mb-7">
+
+            <h3 className="text-2xl font-bold text-slate-900">
+              Find Your Career Path
+            </h3>
+
+            <p className="text-slate-500 mt-2">
+              Enter your current skills and interests to get personalized
+              career recommendations.
+            </p>
+
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* SKILLS */}
 
             <div>
-              <label className="block mb-2 text-lg">
-                Skills
+
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Your Skills
               </label>
 
               <input
-                className="w-full p-4 rounded-lg bg-slate-800 outline-none"
-                placeholder="python, sql, machine learning"
+                className="w-full p-4 rounded-xl border border-slate-300 bg-white text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="Python, SQL, Machine Learning"
                 value={skills}
-                onChange={(e) =>
-                  setSkills(e.target.value)
-                }
+                onChange={(e) => setSkills(e.target.value)}
               />
+
+              <p className="text-xs text-slate-400 mt-2">
+                Separate multiple skills with commas.
+              </p>
+
             </div>
 
             {/* INTERESTS */}
 
             <div>
-              <label className="block mb-2 text-lg">
-                Interests
+
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Your Interests
               </label>
 
               <input
-                className="w-full p-4 rounded-lg bg-slate-800 outline-none"
-                placeholder="ai, analytics, research"
+                className="w-full p-4 rounded-xl border border-slate-300 bg-white text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="AI, Analytics, Research"
                 value={interests}
-                onChange={(e) =>
-                  setInterests(e.target.value)
-                }
+                onChange={(e) => setInterests(e.target.value)}
               />
+
+              <p className="text-xs text-slate-400 mt-2">
+                Separate multiple interests with commas.
+              </p>
+
             </div>
 
-            {/* RECOMMEND BUTTON */}
-
-            <button
-              onClick={handleRecommend}
-              className="w-full bg-blue-600 hover:bg-blue-700 transition p-4 rounded-lg font-semibold text-lg"
-            >
-              Get Recommendation
-            </button>
-
           </div>
+
+          {/* RECOMMEND BUTTON */}
+
+          <button
+            onClick={handleRecommend}
+            disabled={loading}
+            className="mt-7 w-full md:w-auto px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white font-semibold transition shadow-sm"
+          >
+            {loading ? "Analyzing Your Profile..." : "Get Career Recommendation"}
+          </button>
 
         </div>
 
         {/* ==================== RECOMMENDATION RESULT ==================== */}
 
         {result && (
-          <div className="bg-slate-900 rounded-2xl mt-10 p-8 shadow-xl">
 
-            {/* RECOMMENDED CAREER */}
+          <div className="mt-10 space-y-8">
 
-            <h2 className="text-3xl font-bold text-green-400">
-              {result.recommended_career}
-            </h2>
+            {/* MAIN RECOMMENDATION */}
 
-            {/* MATCH PERCENTAGE */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
 
-            <div className="mt-6 bg-slate-800 rounded-xl p-5">
+              <div className="flex flex-col md:flex-row justify-between gap-6">
 
-              <div className="flex justify-between items-center mb-3">
+                <div>
 
-                <h3 className="text-xl font-semibold">
-                  🎯 Career Match
-                </h3>
+                  <p className="text-sm font-semibold text-blue-600 uppercase tracking-wide">
+                    Recommended Career
+                  </p>
 
-                <span className="text-2xl font-bold text-blue-400">
-                  {result.match_percentage}%
-                </span>
+                  <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">
+                    {result.recommended_career}
+                  </h2>
+
+                  <p className="text-slate-500 mt-2">
+                    Based on your skills and interests.
+                  </p>
+
+                </div>
+
+                <div className="bg-blue-50 rounded-2xl px-7 py-5 text-center">
+
+                  <p className="text-sm text-slate-500">
+                    Confidence Score
+                  </p>
+
+                  <p className="text-3xl font-bold text-blue-600 mt-1">
+                    {result.confidence_score}
+                  </p>
+
+                </div>
 
               </div>
 
-              <div className="w-full bg-slate-700 rounded-full h-4">
+              {/* MATCH PERCENTAGE */}
 
-                <div
-                  className="bg-blue-600 h-4 rounded-full transition-all"
-                  style={{
-                    width: `${result.match_percentage}%`,
-                  }}
-                />
+              <div className="mt-8">
+
+                <div className="flex justify-between items-center mb-3">
+
+                  <h3 className="font-semibold text-slate-800">
+                    Career Match
+                  </h3>
+
+                  <span className="text-xl font-bold text-blue-600">
+                    {result.match_percentage}%
+                  </span>
+
+                </div>
+
+                <div className="w-full bg-slate-100 rounded-full h-4">
+
+                  <div
+                    className="bg-blue-600 h-4 rounded-full transition-all duration-700"
+                    style={{
+                      width: `${result.match_percentage}%`,
+                    }}
+                  />
+
+                </div>
 
               </div>
 
             </div>
 
-            {/* CONFIDENCE SCORE */}
-
-            <p className="mt-5 text-xl">
-
-              Confidence Score:
-
-              <span className="font-bold text-blue-400">
-                {" "}
-                {result.confidence_score}
-              </span>
-
-            </p>
-
-            {/* ==================== TOP 3 CAREER MATCHES ==================== */}
+            {/* ==================== TOP 3 CAREERS ==================== */}
 
             {result.top_matches?.length > 0 && (
-              <div className="mt-10">
 
-                <div className="mb-6">
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
 
-                  <h3 className="text-2xl font-bold">
-                    🏆 Top Career Matches
+                <div className="mb-7">
+
+                  <h3 className="text-2xl font-bold text-slate-900">
+                    Top Career Matches
                   </h3>
 
-                  <p className="text-gray-400 mt-1">
-                    Based on your skills and interests
+                  <p className="text-slate-500 mt-1">
+                    Other career paths that match your profile.
                   </p>
 
                 </div>
@@ -339,60 +371,58 @@ export default function Dashboard() {
 
                       <div
                         key={index}
-                        className={`relative bg-slate-800 p-6 rounded-2xl border transition duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                        className={`rounded-2xl p-6 border transition hover:-translate-y-1 hover:shadow-md ${
                           index === 0
-                            ? "border-blue-500 shadow-lg shadow-blue-500/10"
-                            : "border-slate-700"
+                            ? "border-blue-300 bg-blue-50/50"
+                            : "border-slate-200 bg-white"
                         }`}
                       >
 
                         {/* RANK */}
 
-                        <div className="flex items-center justify-between">
+                        <div className="flex justify-between items-center">
 
                           <span
-                            className={`text-xs font-bold px-3 py-1 rounded-full ${
+                            className={`px-3 py-1 rounded-full text-xs font-bold ${
                               index === 0
                                 ? "bg-blue-600 text-white"
-                                : "bg-slate-700 text-gray-300"
+                                : "bg-slate-100 text-slate-600"
                             }`}
                           >
                             #{index + 1}
                           </span>
 
                           {index === 0 && (
-                            <span className="text-xs text-blue-400 font-semibold">
+                            <span className="text-xs font-semibold text-blue-600">
                               Best Match
                             </span>
                           )}
 
                         </div>
 
-                        {/* CAREER NAME */}
+                        {/* CAREER */}
 
-                        <h4 className="text-xl font-bold text-white mt-5">
+                        <h4 className="text-xl font-bold text-slate-900 mt-5">
                           {match.career}
                         </h4>
 
-                        {/* MATCH PERCENTAGE */}
+                        {/* MATCH */}
 
-                        <div className="mt-4">
+                        <div className="mt-5">
 
                           <div className="flex justify-between text-sm mb-2">
 
-                            <span className="text-gray-400">
-                              Career Match
+                            <span className="text-slate-500">
+                              Match
                             </span>
 
-                            <span className="text-green-400 font-bold">
+                            <span className="font-bold text-green-600">
                               {match.match_percentage}%
                             </span>
 
                           </div>
 
-                          {/* PROGRESS BAR */}
-
-                          <div className="w-full bg-slate-700 rounded-full h-2">
+                          <div className="w-full bg-slate-100 rounded-full h-2">
 
                             <div
                               className="bg-green-500 h-2 rounded-full transition-all duration-500"
@@ -409,7 +439,7 @@ export default function Dashboard() {
 
                         <div className="mt-6">
 
-                          <p className="text-sm font-semibold text-gray-300 mb-3">
+                          <p className="text-sm font-semibold text-slate-700 mb-3">
                             Matching Skills
                           </p>
 
@@ -425,7 +455,7 @@ export default function Dashboard() {
 
                                   <span
                                     key={skillIndex}
-                                    className="bg-green-900/60 text-green-300 border border-green-700/50 px-2.5 py-1 rounded-lg text-xs"
+                                    className="bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded-lg text-xs font-medium"
                                   >
                                     ✓ {skill}
                                   </span>
@@ -437,7 +467,7 @@ export default function Dashboard() {
 
                           ) : (
 
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-sm text-slate-400">
                               No matching skills yet.
                             </p>
 
@@ -445,7 +475,7 @@ export default function Dashboard() {
 
                         </div>
 
-                        {/* EXPLORE BUTTON */}
+                        {/* EXPLORE */}
 
                         <button
                           onClick={() => {
@@ -454,10 +484,10 @@ export default function Dashboard() {
                                 match.career
                               )}`;
                           }}
-                          className={`mt-6 w-full px-4 py-2.5 rounded-xl font-semibold transition ${
+                          className={`mt-6 w-full px-4 py-3 rounded-xl font-semibold transition ${
                             index === 0
-                              ? "bg-blue-600 hover:bg-blue-700"
-                              : "bg-slate-700 hover:bg-slate-600"
+                              ? "bg-blue-600 hover:bg-blue-700 text-white"
+                              : "bg-slate-100 hover:bg-slate-200 text-slate-700"
                           }`}
                         >
                           Explore Career →
@@ -471,115 +501,161 @@ export default function Dashboard() {
                 </div>
 
               </div>
+
             )}
 
-            {/* ==================== MISSING SKILLS ==================== */}
+            {/* ==================== SKILL ANALYSIS ==================== */}
 
-            <div className="mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-              <h3 className="text-2xl font-semibold mb-3">
-                ⚠️ Skills to Improve
-              </h3>
+              {/* MISSING SKILLS */}
 
-              {result.missing_skills?.length > 0 ? (
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
 
-                <div className="flex flex-wrap gap-3">
+                <h3 className="text-xl font-bold text-slate-900">
+                  Skills to Improve
+                </h3>
 
-                  {result.missing_skills.map(
-                    (skill: string, index: number) => (
+                <p className="text-slate-500 text-sm mt-1">
+                  Skills that could strengthen your profile.
+                </p>
 
-                      <span
-                        key={index}
-                        className="bg-orange-600 px-4 py-2 rounded-lg"
-                      >
-                        {skill}
-                      </span>
+                <div className="mt-5">
 
-                    )
+                  {result.missing_skills?.length > 0 ? (
+
+                    <div className="flex flex-wrap gap-3">
+
+                      {result.missing_skills.map(
+                        (skill: string, index: number) => (
+
+                          <span
+                            key={index}
+                            className="bg-orange-50 text-orange-700 border border-orange-200 px-4 py-2 rounded-lg text-sm font-medium"
+                          >
+                            {skill}
+                          </span>
+
+                        )
+                      )}
+
+                    </div>
+
+                  ) : (
+
+                    <p className="text-green-600 font-medium">
+                      You already have all the required skills!
+                    </p>
+
                   )}
 
                 </div>
 
-              ) : (
+              </div>
 
-                <p className="text-green-400">
-                  You already have all the required skills!
+              {/* MATCHED INTERESTS */}
+
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+
+                <h3 className="text-xl font-bold text-slate-900">
+                  Matching Interests
+                </h3>
+
+                <p className="text-slate-500 text-sm mt-1">
+                  Interests that align with this career.
                 </p>
 
-              )}
+                <div className="mt-5">
 
-            </div>
+                  {result.matched_interests?.length > 0 ? (
 
-            {/* ==================== MATCHED INTERESTS ==================== */}
+                    <div className="flex flex-wrap gap-3">
 
-            <div className="mt-8">
+                      {result.matched_interests.map(
+                        (interest: string, index: number) => (
 
-              <h3 className="text-2xl font-semibold mb-3">
-                ❤️ Matching Interests
-              </h3>
+                          <span
+                            key={index}
+                            className="bg-purple-50 text-purple-700 border border-purple-200 px-4 py-2 rounded-lg text-sm font-medium"
+                          >
+                            {interest}
+                          </span>
 
-              {result.matched_interests?.length > 0 ? (
+                        )
+                      )}
 
-                <div className="flex flex-wrap gap-3">
+                    </div>
 
-                  {result.matched_interests.map(
-                    (interest: string, index: number) => (
+                  ) : (
 
-                      <span
-                        key={index}
-                        className="bg-purple-600 px-4 py-2 rounded-lg"
-                      >
-                        {interest}
-                      </span>
+                    <p className="text-slate-400">
+                      No matching interests found yet.
+                    </p>
 
-                    )
                   )}
 
                 </div>
 
-              ) : (
-
-                <p className="text-gray-400">
-                  No matching interests found yet.
-                </p>
-
-              )}
+              </div>
 
             </div>
 
             {/* ==================== ROADMAP ==================== */}
 
-            <div className="mt-8">
+            <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
 
-              <h3 className="text-2xl font-semibold mb-3">
-                🛣️ Roadmap
+              <h3 className="text-2xl font-bold text-slate-900">
+                Career Roadmap
               </h3>
 
-              <ul className="list-disc list-inside space-y-2">
+              <p className="text-slate-500 mt-1">
+                Follow these steps to build the required skills.
+              </p>
+
+              <div className="mt-7 space-y-4">
 
                 {result.roadmap?.map(
                   (item: string, index: number) => (
 
-                    <li key={index}>
-                      {item}
-                    </li>
+                    <div
+                      key={index}
+                      className="flex items-start gap-4"
+                    >
+
+                      <div className="flex-shrink-0 w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                        {index + 1}
+                      </div>
+
+                      <div className="flex-1 bg-slate-50 border border-slate-200 rounded-xl p-4">
+
+                        <p className="text-slate-700">
+                          {item}
+                        </p>
+
+                      </div>
+
+                    </div>
 
                   )
                 )}
 
-              </ul>
+              </div>
 
             </div>
 
             {/* ==================== RELATED CAREERS ==================== */}
 
-            <div className="mt-8">
+            <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
 
-              <h3 className="text-2xl font-semibold mb-3">
-                🔗 Related Career Paths
+              <h3 className="text-2xl font-bold text-slate-900">
+                Related Career Paths
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <p className="text-slate-500 mt-1">
+                Explore other careers connected to your recommendation.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-7">
 
                 {result.related_careers?.map(
                   (career: string, index: number) => (
@@ -592,15 +668,15 @@ export default function Dashboard() {
                             career
                           )}`;
                       }}
-                      className="text-left bg-slate-800 p-5 rounded-xl hover:bg-slate-700 transition"
+                      className="text-left bg-slate-50 border border-slate-200 p-5 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition"
                     >
 
-                      <h4 className="text-lg font-semibold text-blue-400">
+                      <h4 className="text-lg font-bold text-blue-600">
                         {career}
                       </h4>
 
-                      <p className="text-gray-400 mt-2">
-                        Click to explore this career path.
+                      <p className="text-slate-500 text-sm mt-2">
+                        Explore this career path →
                       </p>
 
                     </button>
@@ -614,170 +690,141 @@ export default function Dashboard() {
 
             {/* ==================== RESOURCES ==================== */}
 
-            <div className="mt-8">
+            <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
 
-              <h3 className="text-2xl font-semibold mb-3">
-                📚 Resources
+              <h3 className="text-2xl font-bold text-slate-900">
+                Learning Resources
               </h3>
 
-              <ul className="space-y-2">
+              <p className="text-slate-500 mt-1">
+                Useful resources for your recommended career.
+              </p>
+
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
 
                 {result.resources?.map(
                   (resource: any, index: number) => (
 
-                    <li key={index}>
+                    <a
+                      key={index}
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-300 transition"
+                    >
 
-                      <a
-                        href={resource.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 underline hover:text-blue-300"
-                      >
+                      <p className="font-semibold text-blue-600">
                         {resource.name}
-                      </a>
+                      </p>
 
-                    </li>
+                      <p className="text-sm text-slate-500 mt-1">
+                        Open learning resource →
+                      </p>
+
+                    </a>
 
                   )
                 )}
 
-              </ul>
+              </div>
 
             </div>
 
           </div>
+
         )}
 
-        {/* ==================== RECOMMENDATION HISTORY ==================== */}
+        {/* ==================== HISTORY ==================== */}
 
-        <div className="bg-slate-900 rounded-2xl mt-10 p-8 shadow-xl">
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm mt-10">
 
-          <h2 className="text-2xl font-bold mb-5">
-            Recommendation History
-          </h2>
+          <div className="mb-6">
+
+            <h2 className="text-2xl font-bold text-slate-900">
+              Recommendation History
+            </h2>
+
+            <p className="text-slate-500 mt-1">
+              Your previous career recommendations.
+            </p>
+
+          </div>
 
           {history.length === 0 ? (
 
-            <p className="text-gray-400">
-              No recommendations yet.
-            </p>
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center">
+
+              <p className="text-slate-500">
+                No recommendations yet.
+              </p>
+
+            </div>
 
           ) : (
 
-            <ul className="space-y-3">
+            <div className="space-y-3">
 
               {history.map(
                 (item: any, index: number) => (
 
-                  <li
+                  <div
                     key={index}
-                    className="bg-slate-800 p-4 rounded-lg flex justify-between"
+                    className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 bg-slate-50 border border-slate-200 p-5 rounded-xl"
                   >
 
-                    <span>
-                      {item.career}
-                    </span>
+                    <div>
 
-                    <span className="text-blue-400 font-bold">
+                      <p className="font-semibold text-slate-900">
+                        {item.career}
+                      </p>
+
+                      <p className="text-sm text-slate-500 mt-1">
+                        Previous recommendation
+                      </p>
+
+                    </div>
+
+                    <span className="px-4 py-2 rounded-lg bg-blue-50 text-blue-600 font-bold text-sm">
                       Score: {item.confidence}
                     </span>
 
-                  </li>
+                  </div>
 
                 )
               )}
 
-            </ul>
+            </div>
 
           )}
 
         </div>
 
-        {/* ==================== CAREER CHATBOT ==================== */}
+        {/* ==================== CAREER ASSISTANT CTA ==================== */}
 
-        <div className="bg-slate-900 rounded-2xl mt-10 p-8 shadow-xl">
+        <div className="mt-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white shadow-lg">
 
-          <h2 className="text-2xl font-bold">
-            💬 Career Assistant
-          </h2>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
 
-          <p className="text-gray-400 mt-2">
-            Ask me about careers, skills, roadmaps, or learning resources.
-          </p>
+            <div>
 
-          {/* CHAT AREA */}
+              <h2 className="text-2xl font-bold">
+                Need help with your career?
+              </h2>
 
-          <div className="bg-slate-950 rounded-xl p-5 min-h-[250px] max-h-[400px] overflow-y-auto space-y-4 mt-6">
+              <p className="text-blue-100 mt-2">
+                Ask our AI Career Assistant about skills, roadmaps,
+                projects, certifications, or interviews.
+              </p>
 
-            {chatMessages.length === 0 ? (
-
-              <div className="text-gray-500 text-center py-10">
-                Start a conversation with your Career Assistant.
-              </div>
-
-            ) : (
-
-              chatMessages.map((chat, index) => (
-
-                <div
-                  key={index}
-                  className={`flex ${
-                    chat.sender === "user"
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
-
-                  <div
-                    className={`max-w-[80%] px-4 py-3 rounded-xl ${
-                      chat.sender === "user"
-                        ? "bg-blue-600"
-                        : "bg-slate-800"
-                    }`}
-                  >
-                    {chat.text}
-                  </div>
-
-                </div>
-
-              ))
-
-            )}
-
-            {chatLoading && (
-
-              <div className="text-gray-400">
-                Career Assistant is typing...
-              </div>
-
-            )}
-
-          </div>
-
-          {/* CHAT INPUT */}
-
-          <div className="flex gap-3 mt-5">
-
-            <input
-              className="flex-1 p-4 rounded-lg bg-slate-800 outline-none"
-              placeholder="Ask something like: How do I become a data scientist?"
-              value={message}
-              onChange={(e) =>
-                setMessage(e.target.value)
-              }
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleChat();
-                }
-              }}
-            />
+            </div>
 
             <button
-              onClick={handleChat}
-              disabled={chatLoading}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 px-6 rounded-lg font-semibold"
+              onClick={() => {
+                window.location.href = "/dashboard/chat";
+              }}
+              className="px-6 py-3 rounded-xl bg-white text-blue-600 hover:bg-blue-50 font-bold transition whitespace-nowrap"
             >
-              Send
+              Open Career Assistant →
             </button>
 
           </div>
