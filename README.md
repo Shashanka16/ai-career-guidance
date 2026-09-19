@@ -1,6 +1,6 @@
 # 🤖 AI Career Guidance Platform
 
-An AI-powered career guidance platform that analyzes a user's **skills and interests** to recommend suitable career paths and provide personalized learning guidance.
+An AI-powered full-stack career guidance platform that helps students discover suitable career paths based on their skills and interests.
 
 The platform combines a **FastAPI backend, Next.js frontend, career recommendation engine, database-backed recommendation history, and an AI-powered career assistant** into one full-stack application.
 
@@ -12,7 +12,7 @@ The platform combines a **FastAPI backend, Next.js frontend, career recommendati
 
 * Takes user skills and interests as input.
 * Compares them against multiple career profiles.
-* Provides the most suitable career recommendation.
+* Provides a personalized career recommendation.
 * Displays a career match percentage.
 * Shows the top 3 matching career paths.
 
@@ -22,93 +22,121 @@ The platform combines a **FastAPI backend, Next.js frontend, career recommendati
 * Identifies missing skills that the user should improve.
 * Displays matching interests.
 
-### 🛣️ Personalized Career Roadmap
+### 🗺️ Career Roadmap
 
-Each recommended career provides:
+* Provides a structured learning roadmap for the recommended career.
+* Helps beginners understand what to learn step by step.
 
-* Learning roadmap
-* Required skills
-* Learning resources
-* Related career paths
+### 🔗 Learning Resources
 
-### 💬 AI Career Assistant
+* Provides useful learning resources related to the recommended career.
+* Helps users continue learning after receiving their recommendation.
 
-An AI-powered chatbot that helps users with:
+### 🔄 Related Career Paths
 
-* Career questions
-* Skills to learn
-* Learning roadmaps
-* Projects
-* Certifications
-* Interview preparation
-* Career-specific guidance
-
-The chatbot receives the user's recommended career as context so that its responses can be personalized.
+* Shows other career options related to the recommended career.
+* Allows users to explore alternative career paths.
 
 ### 📚 Recommendation History
 
-Users can view their previous career recommendations.
+* Stores previous career recommendations.
+* Allows users to view their recommendation history.
+* Recommendations are associated with individual user accounts.
+
+### 💬 AI Career Assistant
+
+* Separate AI-powered career assistant page.
+* Uses the user's recommended career as context.
+* Provides personalized guidance about:
+
+  * Career skills
+  * Learning paths
+  * Projects
+  * Certifications
+  * Interview preparation
+  * Programming and technology skills
 
 ### 🔐 Authentication
 
-* User registration
-* User login
-* User-specific recommendation history
-* Logout functionality
+* User registration and login.
+* User-specific recommendation history.
+* Logout functionality.
+
+### 📱 Responsive Web Interface
+
+* Clean and modern light-themed interface.
+* Dashboard for career recommendations.
+* Separate Career Assistant page.
+
+---
+
+## 📸 Application Screenshots
+
+### 🏠 Career Dashboard
+
+![Dashboard 1](screenshots/dashboard1.png)
+
+![Dashboard 2](screenshots/dashboard2.png)
+
+---
+
+### 🎯 Career Recommendation
+
+![Recommended Career 1](screenshots/recommended1.png)
+
+![Recommended Career 2](screenshots/recommended2.png)
+
+![Recommended Career 3](screenshots/recommended3.png)
+
+![Recommended Career 4](screenshots/recommended4.png)
+
+---
+
+### 💬 AI Career Assistant
+
+![Career Assistant](screenshots/career-assistant.png)
 
 ---
 
 ## 🏗️ System Architecture
 
 ```text
-                    ┌──────────────────────┐
-                    │      User            │
-                    │ Skills + Interests   │
-                    └──────────┬───────────┘
-                               │
-                               ▼
-                    ┌──────────────────────┐
-                    │   Next.js Frontend   │
-                    │      Dashboard       │
-                    └──────────┬───────────┘
-                               │ HTTP Requests
-                               ▼
-                    ┌──────────────────────┐
-                    │    FastAPI Backend   │
-                    └──────────┬───────────┘
-                               │
-              ┌────────────────┼────────────────┐
-              ▼                ▼                ▼
-       ┌─────────────┐  ┌──────────────┐  ┌──────────────┐
-       │ Recommendation│ │ Authentication│ │ AI Chatbot   │
-       │    Engine     │ │    System     │ │  OpenAI API  │
-       └──────┬──────┘  └──────┬───────┘  └──────────────┘
-              │                │
-              └────────┬───────┘
-                       ▼
-                ┌──────────────┐
-                │    SQLite    │
-                │   Database   │
-                └──────────────┘
+                    ┌─────────────────────────┐
+                    │         User            │
+                    └────────────┬────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │    Next.js Frontend     │
+                    │   React + TypeScript    │
+                    │      Tailwind CSS       │
+                    └────────────┬────────────┘
+                                 │
+                            REST API
+                                 │
+                                 ▼
+                    ┌─────────────────────────┐
+                    │     FastAPI Backend     │
+                    │    Python + Uvicorn     │
+                    └────────────┬────────────┘
+                                 │
+              ┌──────────────────┼──────────────────┐
+              │                  │                  │
+              ▼                  ▼                  ▼
+     ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+     │ Career         │ │ Authentication │ │ AI Career      │
+     │ Recommendation │ │                │ │ Assistant      │
+     │ Engine         │ │                │ │ OpenAI API     │
+     └────────────────┘ └────────────────┘ └────────────────┘
+              │                  │                  │
+              └──────────────────┼──────────────────┘
+                                 ▼
+                    ┌─────────────────────────┐
+                    │ SQLite + SQLAlchemy     │
+                    │ User & Recommendation   │
+                    │ History                 │
+                    └─────────────────────────┘
 ```
-
----
-
-## 🧠 Recommendation Logic
-
-The recommendation engine compares the user's input with predefined career profiles.
-
-The system considers:
-
-* **Skills**
-* **Interests**
-* Skill matches
-* Missing skills
-* Interest matches
-
-Skills are given a higher weight than interests when calculating the career score.
-
-The system evaluates available careers and returns the **top 3 matching careers** along with their match information.
 
 ---
 
@@ -139,47 +167,50 @@ The system evaluates available careers and returns the **top 3 matching careers*
 
 ### Development Tools
 
+* Visual Studio Code
 * Git
 * GitHub
-* VS Code
+* Swagger UI
 
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```text
 ai-career-guidance/
 │
 ├── backend/
 │   ├── models/
-│   │   ├── users.py
-│   │   └── recommendation.py
-│   │
 │   ├── routes/
-│   │   ├── auth.py
-│   │   ├── career.py
-│   │   └── chatbot.py
-│   │
 │   ├── services/
-│   │   └── career_service.py
-│   │
 │   ├── database.py
 │   ├── main.py
-│   ├── .env
-│   └── career.db
+│   ├── career.db
+│   └── .env
 │
 ├── frontend/
 │   ├── app/
 │   │   ├── dashboard/
-│   │   ├── login/
-│   │   ├── register/
-│   │   └── career/
+│   │   │   ├── page.tsx
+│   │   │   └── chat/
+│   │   │       └── page.tsx
+│   │   └── login/
 │   │
 │   ├── components/
 │   ├── hooks/
+│   ├── lib/
 │   ├── services/
-│   ├── types/
-│   └── lib/
+│   └── types/
+│
+├── screenshots/
+│   ├── dashboard1.png
+│   ├── dashboard2.png
+│   ├── recommended.png
+│   ├── recommended1.png
+│   ├── recommended2.png
+│   ├── recommended3.png
+│   ├── recommended4.png
+│   └── career-assistant.png
 │
 ├── .gitignore
 └── README.md
@@ -187,60 +218,113 @@ ai-career-guidance/
 
 ---
 
-## ⚙️ How to Run
+## ⚙️ How It Works
 
-### 1. Clone the repository
+### 1. User Registration
 
-```bash
-git clone https://github.com/Shashanka16/ai-career-guidance.git
-cd ai-career-guidance
-```
+The user creates an account using the registration page.
 
-### 2. Backend Setup
+### 2. User Login
 
-Open a terminal:
+The user logs into the platform and is redirected to the dashboard.
 
-```bash
-cd backend
-```
+### 3. Enter Skills and Interests
 
-Create a virtual environment:
+The user provides their current technical skills and career interests.
 
-```bash
-python -m venv venv
-```
+### 4. Career Recommendation
 
-Activate it on Windows:
+The backend recommendation engine compares the user's inputs with predefined career profiles.
 
-```powershell
-venv\Scripts\activate
-```
+The system calculates matching skills and interests and generates career matches.
 
-Install dependencies:
+### 5. View Results
 
-```bash
-pip install fastapi uvicorn sqlalchemy python-dotenv openai
-```
+The dashboard displays:
 
-Create a `.env` file:
+* Recommended career
+* Match percentage
+* Confidence score
+* Matching skills
+* Missing skills
+* Top career matches
+* Career roadmap
+* Related careers
+* Learning resources
+
+### 6. Recommendation History
+
+The recommendation is stored in the database so the user can access previous recommendations.
+
+### 7. AI Career Assistant
+
+The user can open the Career Assistant and ask career-related questions.
+
+The recommended career is passed to the AI assistant as context so that responses can be tailored to the user's career path.
+
+---
+
+## 🧠 Career Recommendation Logic
+
+The recommendation engine compares user input against career profiles containing:
+
+* Required skills
+* Interests
+* Career roadmap
+* Learning resources
+* Related careers
+
+Skills receive higher weight than interests when calculating the career match.
+
+The system evaluates multiple careers and returns the best match along with the top alternative career paths.
+
+---
+
+## 🔑 Environment Variables
+
+The backend uses an environment variable for the OpenAI API key.
+
+Create a `.env` file inside the `backend` folder:
 
 ```env
-OPENAI_API_KEY=your_api_key_here
+OPENAI_API_KEY=your_openai_api_key
 ```
 
-Start the backend:
+**Never commit your API key to GitHub.**
 
-```bash
+The `.env` file should remain ignored by Git.
+
+---
+
+## ▶️ Running the Project Locally
+
+### Backend
+
+Open a terminal and navigate to:
+
+```powershell
+cd ai-career-guidance\backend
+```
+
+Activate the virtual environment:
+
+```powershell
+.\venv\Scripts\activate
+```
+
+Start the FastAPI server:
+
+```powershell
 uvicorn main:app --reload
 ```
 
-Backend will run at:
+Backend:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-API documentation:
+Swagger API documentation:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -248,27 +332,21 @@ http://127.0.0.1:8000/docs
 
 ---
 
-### 3. Frontend Setup
+### Frontend
 
 Open another terminal:
 
-```bash
-cd frontend
-```
-
-Install dependencies:
-
-```bash
-npm install
+```powershell
+cd ai-career-guidance\frontend
 ```
 
 Start the development server:
 
-```bash
+```powershell
 npm run dev
 ```
 
-Open:
+Frontend:
 
 ```text
 http://localhost:3000
@@ -276,23 +354,7 @@ http://localhost:3000
 
 ---
 
-## 🔑 Environment Variables
-
-The OpenAI API key should be stored only in the backend `.env` file.
-
-Example:
-
-```env
-OPENAI_API_KEY=your_api_key_here
-```
-
-Never commit your real API key to GitHub.
-
-The `.env` file should remain in `.gitignore`.
-
----
-
-## 🖥️ Main User Flow
+## 🔄 Application Flow
 
 ```text
 Register
@@ -303,76 +365,55 @@ Dashboard
    ↓
 Enter Skills + Interests
    ↓
-Career Recommendation
+Career Recommendation Engine
    ↓
-View Top 3 Careers
+Recommended Career
    ↓
-View Skill Gaps
-   ↓
-View Career Roadmap
-   ↓
-Explore Related Careers
-   ↓
-Ask AI Career Assistant
+ ┌───────────────────────┐
+ │ Match Analysis        │
+ │ Skill Gaps            │
+ │ Top Career Matches    │
+ │ Career Roadmap        │
+ │ Resources             │
+ │ Related Careers       │
+ └───────────────────────┘
    ↓
 Recommendation History
+   ↓
+AI Career Assistant
 ```
-
----
-
-## 🎓 Example
-
-A user might enter:
-
-```text
-Skills:
-Python, Machine Learning
-
-Interests:
-AI, Models
-```
-
-The system analyzes the input and may return careers such as:
-
-```text
-1. Machine Learning Engineer
-2. AI Engineer
-3. Data Scientist
-```
-
-The user can then explore the recommended career, identify missing skills, follow the roadmap, and ask the AI assistant what to learn next.
 
 ---
 
 ## 🔮 Future Improvements
 
-Possible future enhancements include:
-
-* Resume-based career recommendations
-* More advanced ML-based recommendation models
-* User progress tracking
-* Personalized project recommendations
-* Job and internship recommendations
-* Course recommendation system
-* Career analytics dashboard
-* Deployment using cloud infrastructure
-* More comprehensive authentication and authorization
+* Resume upload and resume analysis.
+* Resume-based career recommendations.
+* More advanced AI career matching.
+* Personalized weekly learning plans.
+* Job and internship recommendations.
+* Integration with job platforms.
+* More career profiles and learning resources.
+* Progress tracking for career roadmaps.
+* AI-powered mock interviews.
+* Skill assessment tests.
+* Improved recommendation algorithms using machine learning.
 
 ---
 
-## 📌 Project Goals
+## 🎓 Project Purpose
 
-This project demonstrates practical experience with:
+This project was developed as a full-stack and Generative AI project to explore how AI can be used to provide personalized career guidance to students and beginners.
+
+It combines:
 
 * Full-stack web development
-* REST API development
-* Database integration
+* REST APIs
+* Database management
 * Authentication
 * Recommendation systems
-* AI API integration
-* Frontend state management
-* Git/GitHub workflow
-* Building an end-to-end software product
+* Generative AI
+* Personalized user experiences
 
 ---
 
@@ -380,7 +421,20 @@ This project demonstrates practical experience with:
 
 **Shashanka**
 
-B.Tech Computer Science Engineering
+B.Tech CSE Student
+
+---
+
+## 📌 Repository
 
 GitHub:
-https://github.com/Shashanka16
+
+`https://github.com/Shashanka16/ai-career-guidance.git`
+
+---
+
+## ⚠️ Security Note
+
+API keys, passwords, environment files, database files, and other sensitive information should not be committed to the public repository.
+
+Use environment variables for secret credentials.
