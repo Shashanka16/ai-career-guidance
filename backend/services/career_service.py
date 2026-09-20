@@ -1032,7 +1032,7 @@ def recommend_career(user_skills, user_interests):
     user_interests = normalize(user_interests)
 
     best_match = None
-    max_score = -1
+    max_score = 0
 
     best_details = {
         "matched_skills": [],
@@ -1096,7 +1096,9 @@ def recommend_career(user_skills, user_interests):
         })
 
         # Find the primary recommendation
-        if score > max_score:
+        # Only select a career when there is at least
+        # one actual match.
+        if score > 0 and score > max_score:
             max_score = score
             best_match = career_name
 

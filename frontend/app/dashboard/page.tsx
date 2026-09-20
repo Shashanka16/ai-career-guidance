@@ -292,11 +292,13 @@ export default function Dashboard() {
                   </p>
 
                   <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">
-                    {result.recommended_career}
+                    {result.recommended_career || "No strong career match found"}
                   </h2>
 
                   <p className="text-slate-500 mt-2">
-                    Based on your skills and interests.
+                    {result.recommended_career
+                      ? "Based on your skills and interests."
+                      : "Try entering technical skills or interests related to the careers you are exploring."}
                   </p>
 
                 </div>
@@ -345,6 +347,10 @@ export default function Dashboard() {
               </div>
 
             </div>
+
+            {result.recommended_career && (
+
+              <>
 
             {/* ==================== TOP 3 CAREERS ==================== */}
 
@@ -729,6 +735,10 @@ export default function Dashboard() {
               </div>
 
             </div>
+
+              </>
+
+            )}
 
           </div>
 
